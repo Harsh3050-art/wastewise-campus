@@ -1,3 +1,7 @@
+
 venv/
+__pycache__/
+*.py[cod]
 *.db
 .streamlit/secrets.toml
+preview.html
