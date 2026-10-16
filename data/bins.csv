@@ -1,0 +1,51 @@
+bin_id,name,lat,lng,type,size,capacity_litres,usage
+BIN001,Bin Site 01,29.8683825,77.8959055,ewaste,medium,120,medium
+BIN002,Bin Site 02,29.8621229,77.8956065,ewaste,medium,120,medium
+BIN003,Bin Site 03,29.8624393,77.8968336,wet,small,40,low
+BIN004,Bin Site 04,29.868095,77.899732,ewaste,medium,120,low
+BIN005,Bin Site 05,29.8663197,77.9003543,recyclable,bulk,1100,high
+BIN006,Bin Site 06,29.8688387,77.8995983,hazardous,medium,120,medium
+BIN007,Bin Site 07,29.8705895,77.8951552,recyclable,small,40,low
+BIN008,Bin Site 08,29.8682383,77.8993723,dry,medium,120,low
+BIN009,Bin Site 09,29.8670826,77.90001,recyclable,medium,120,low
+BIN010,Bin Site 10,29.8650122,77.894657,recyclable,small,40,medium
+BIN011,Bin Site 11,29.8666031,77.8944585,hazardous,medium,120,low
+BIN012,Bin Site 12,29.867751,77.893808,ewaste,medium,120,high
+BIN013,Bin Site 13,29.8671686,77.8941966,dry,large,240,very high
+BIN014,Bin Site 14,29.8656698,77.8954948,hazardous,large,240,low
+BIN015,Bin Site 15,29.8678911,77.8938593,wet,large,240,medium
+BIN016,Bin Site 16,29.8622273,77.8951994,hazardous,large,240,high
+BIN017,Bin Site 17,29.8689023,77.895756,dry,small,40,low
+BIN018,Bin Site 18,29.8684441,77.8988865,wet,large,240,medium
+BIN019,Bin Site 19,29.8694664,77.8956866,hazardous,large,240,high
+BIN020,Bin Site 20,29.8684752,77.8969667,recyclable,small,40,medium
+BIN021,Bin Site 21,29.8700848,77.8954931,ewaste,large,240,high
+BIN022,Bin Site 22,29.8681069,77.8938721,wet,medium,120,high
+BIN023,Bin Site 23,29.8682944,77.8947294,dry,small,40,high
+BIN024,Bin Site 24,29.8622779,77.8953278,recyclable,small,40,low
+BIN025,Bin Site 25,29.869152,77.8960728,dry,medium,120,low
+BIN026,Bin Site 26,29.867574,77.8999398,wet,small,40,medium
+BIN027,Bin Site 27,29.8686845,77.893981,dry,large,240,high
+BIN028,Bin Site 28,29.869279,77.8945581,ewaste,large,240,high
+BIN029,Bin Site 29,29.8699479,77.8954,ewaste,bulk,1100,high
+BIN030,Bin Site 30,29.8677213,77.8992462,ewaste,small,40,medium
+BIN031,Bin Site 31,29.8682509,77.8987646,wet,small,40,very high
+BIN032,Bin Site 32,29.8678252,77.8988256,wet,large,240,low
+BIN033,Bin Site 33,29.8693142,77.8992149,recyclable,medium,120,medium
+BIN034,Bin Site 34,29.8656365,77.9009867,ewaste,bulk,1100,high
+BIN035,Bin Site 35,29.8671176,77.8987641,hazardous,medium,120,high
+BIN036,Bin Site 36,29.8679999,77.8945451,ewaste,small,40,low
+BIN037,Bin Site 37,29.8621805,77.8944274,hazardous,medium,120,low
+BIN038,Bin Site 38,29.8661577,77.8937002,recyclable,small,40,medium
+BIN039,Bin Site 39,29.8703692,77.8963612,recyclable,medium,120,medium
+BIN040,Bin Site 40,29.8687279,77.8946535,hazardous,bulk,1100,high
+BIN041,Bin Site 41,29.8674539,77.8933666,wet,large,240,medium
+BIN042,Bin Site 42,29.8632921,77.8977132,dry,large,240,very high
+BIN043,Bin Site 43,29.8666357,77.8995852,hazardous,bulk,1100,high
+BIN044,Bin Site 44,29.8669414,77.8934606,dry,bulk,1100,very high
+BIN045,Bin Site 45,29.8675476,77.8949201,recyclable,large,240,high
+BIN046,Bin Site 46,29.8690562,77.895817,dry,small,40,low
+BIN047,Bin Site 47,29.868994,77.8980787,dry,small,40,very high
+BIN048,Bin Site 48,29.8666165,77.8952175,wet,medium,120,high
+BIN049,Bin Site 49,29.8684311,77.8951725,hazardous,medium,120,high
+BIN050,Bin Site 50,29.8614726,77.8944835,wet,medium,120,very high
