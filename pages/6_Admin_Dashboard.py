@@ -1,5 +1,7 @@
 import plotly.express as px
 import streamlit as st
+import pandas as pd
+from ml.forecast import load_meta, hourly_profile, train
 
 from services import reports as rp
 from services.alerts import render_alerts
@@ -44,8 +46,8 @@ with r2[2].container(border=True):
 st.subheader("Top 5 bins about to fill")
 render_alerts(5)
 
-tab1, tab2, tab3, tab4 = st.tabs(
-    ["Priority list and cleaning", "Open reports", "Cleaning history", "Overview"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(
+    ["Priority list and cleaning", "Open reports", "Cleaning history", "Overview", "Forecast model"])
 
 with tab1:
     ranked = df.sort_values("priority", ascending=False).copy()
@@ -118,3 +120,41 @@ with tab4:
     st.dataframe(df.sort_values("hours_to_full")[
         ["bin_id", "name", "type", "size", "fill_pct", "eta_text", "open_reports", "status"]],
         hide_index=True)
+with tab5:
+    meta = load_meta()
+    if st.button("Retrain model now"):
+        with st.spinner("Training on the latest readings..."):
+            train()
+        st.rerun()
+    if not meta:
+        st.info("No model yet. Press the button above, or run: python -m ml.forecast --train")
+    else:
+        a, b, c = st.columns(3)
+        a.metric("Model", meta["model_type"])
+        if "mae_model" in meta:
+            b.metric("Error: ML model", f"{meta['mae_model']:.2f} %/h",
+                     delta=f"{meta['mae_model'] - meta['mae_baseline']:.2f} vs baseline",
+                     delta_color="inverse")
+            c.metric("Error: baseline", f"{meta['mae_baseline']:.2f} %/h")
+        st.caption(f"Trained {meta['trained_at']} on {meta['n_train']} bin-hours from "
+                   f"{meta['n_bins']} bins. Errors are measured on the last 5 days of simulated data.")
+        imp = pd.DataFrame({"feature": list(meta["feature_importance"]),
+                            "importance": list(meta["feature_importance"].values())}
+                           ).sort_values("importance")
+        fig = px.bar(imp, x="importance", y="feature", orientation="h",
+                     title="What the model relies on")
+        fig.update_layout(height=320, margin=dict(l=10, r=10, t=50, b=10))
+        st.plotly_chart(fig)
+
+        names = dict(zip(df["bin_id"], df["name"]))
+        pick_bin = st.selectbox("Bin", df["bin_id"].tolist(), key="profile_bin",
+                                format_func=lambda i: f"{names[i]} ({i})")
+        row = df[df["bin_id"] == pick_bin].iloc[0].to_dict()
+        prof = pd.DataFrame({"hour": range(24),
+                             "Weekday": hourly_profile(row, 1),
+                             "Weekend": hourly_profile(row, 6)}
+                            ).melt("hour", var_name="day", value_name="gain")
+        fig2 = px.line(prof, x="hour", y="gain", color="day",
+                       title="Predicted fill gained per hour (%)")
+        fig2.update_layout(height=320, margin=dict(l=10, r=10, t=50, b=10))
+        st.plotly_chart(fig2)

@@ -90,7 +90,9 @@ with col_info:
             st.caption(f"{TYPE_LABEL[r['type']]} bin | {r['size']} | {int(r['capacity_litres'])} L")
             st.progress(min(max(r["fill_pct"], 0), 100) / 100, text=f"{r['fill_pct']:.0f}% full")
             st.write(f"**Status:** {r['status']}")
-            st.write(f"**Prediction:** {r['eta_text']}")
+            st.write(
+    f"**Prediction:** {r['eta_text']} ({r['forecast_source']})"
+)
             last = r["last_cleaned_at"]
             st.write(f"**Last cleaned:** {last if pd.notna(last) else 'no record yet'}")
             st.write(f"**Open reports:** {int(r['open_reports'])}")

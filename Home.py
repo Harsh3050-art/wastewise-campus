@@ -3,7 +3,7 @@ import hmac
 from datetime import date
 
 import streamlit as st
-
+from services.facts import fact_of_the_day
 from services.db import init_db
 from services.auth import signup, login, current_user, sidebar_user
 from services.bins import get_all_bins
@@ -196,11 +196,8 @@ if user:
             st.write(f"Reuse ideas tried: **{s['ideas']}**")
             st.write(f"Approved creations: **{s['makes']}**")
 
-    st.page_link(
-        "pages/1_Campus_Map.py",
-        label="Open the Campus Map",
-        icon="🗺️",
-    )
+        st.page_link("pages/2_Reuse_Coach.py", label="Ask the Reuse Coach", icon="♻️")
+    st.page_link("pages/1_Campus_Map.py", label="Open the campus map", icon="🗺️")
 
     st.stop()
 
@@ -224,6 +221,12 @@ with left:
     """, unsafe_allow_html=True)
 
 with right:
+    fact = fact_of_the_day()
+    if fact:
+            with st.container(border=True):
+                st.subheader("Did you know?")
+                st.write(fact["text"])
+                st.caption("Source: " + fact["source"])
     tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
 
     with tab_login:

@@ -31,22 +31,40 @@ def status_of(pct):
     return "green" if pct < 50 else "yellow" if pct < 80 else "red"
 
 
+def _ml_hours(df):
+    """Time to full from the trained ML model, or None if it is not available."""
+    try:
+        from ml.forecast import predict_hours_to_full
+        return predict_hours_to_full(df)
+    except Exception as e:  # never break the app because of the model
+        print("ML forecast unavailable, using constant rate:", e)
+        return None
+
+
 def add_forecast(df):
     if df.empty:
-        return df.assign(hours_to_full=[], full_at=[], eta_text=[],
-                         status=[], open_reports=[], priority=[])
+        return df.assign(hours_to_full=[], hours_simple=[], forecast_source=[], full_at=[],
+                         eta_text=[], status=[], open_reports=[], priority=[])
     df = df.copy()
     if "open_reports" not in df.columns:
         df["open_reports"] = 0
 
-    def hours(r):
+    def simple(r):
         if r["fill_pct"] >= 100:
             return 0.0
         if r["fill_rate_per_hr"] <= 0:
             return np.nan
         return (100 - r["fill_pct"]) / r["fill_rate_per_hr"]
 
-    df["hours_to_full"] = df.apply(hours, axis=1)
+    df["hours_simple"] = df.apply(simple, axis=1)
+    ml = _ml_hours(df)
+    if ml is not None:
+        df["hours_to_full"] = ml
+        df["forecast_source"] = "ML model"
+    else:
+        df["hours_to_full"] = df["hours_simple"]
+        df["forecast_source"] = "constant rate"
+
     now = datetime.now()
     df["full_at"] = df["hours_to_full"].apply(
         lambda h: pd.NaT if pd.isna(h) else now + timedelta(hours=h))

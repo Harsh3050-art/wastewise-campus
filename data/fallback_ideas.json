@@ -1,0 +1,682 @@
+{
+ "battery": {
+  "keywords": [
+   "battery",
+   "batteries",
+   "power bank"
+  ],
+  "answer": {
+   "item": "battery",
+   "material": "metal and chemicals",
+   "recyclable": false,
+   "correct_bin": "ewaste",
+   "reuse_safe": false,
+   "disposal_note": "Batteries are special care waste. Put them in the e-waste or hazardous bin, never in the wet or dry bin. Do not puncture, burn or open them.",
+   "ideas": []
+  }
+ },
+ "medicine": {
+  "keywords": [
+   "medicine",
+   "medicines",
+   "tablet",
+   "tablets",
+   "pills",
+   "syrup",
+   "expired medicine"
+  ],
+  "answer": {
+   "item": "medicine",
+   "material": "mixed",
+   "recyclable": false,
+   "correct_bin": "hazardous",
+   "reuse_safe": false,
+   "disposal_note": "Medicines are special care waste. Put them in the hazardous bin, never in the wet or dry bin, and never reuse the packaging for food.",
+   "ideas": []
+  }
+ },
+ "bulb": {
+  "keywords": [
+   "bulb",
+   "tube light",
+   "tubelight",
+   "cfl"
+  ],
+  "answer": {
+   "item": "bulb or tube light",
+   "material": "glass and metal",
+   "recyclable": false,
+   "correct_bin": "hazardous",
+   "reuse_safe": false,
+   "disposal_note": "Bulbs and tube lights are special care waste. Keep them unbroken and put them in the hazardous bin.",
+   "ideas": []
+  }
+ },
+ "electronics": {
+  "keywords": [
+   "charger",
+   "cable",
+   "earphone",
+   "earphones",
+   "headphone",
+   "headphones",
+   "electronic",
+   "electronics",
+   "e-waste",
+   "ewaste",
+   "mobile",
+   "phone"
+  ],
+  "answer": {
+   "item": "electronic item",
+   "material": "plastic, metal and circuits",
+   "recyclable": false,
+   "correct_bin": "ewaste",
+   "reuse_safe": false,
+   "disposal_note": "Electronic items are e-waste. Put them in the e-waste bin, never in the wet or dry bin. Do not open or burn them.",
+   "ideas": []
+  }
+ },
+ "glass jar": {
+  "keywords": [
+   "glass jar",
+   "jar",
+   "glass bottle",
+   "glass",
+   "drinking glass"
+  ],
+  "answer": {
+   "item": "glass jar",
+   "material": "glass",
+   "recyclable": true,
+   "correct_bin": "recyclable",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Storage jar for snacks or stationery",
+     "materials_needed": [
+      "glass jar",
+      "warm soapy water"
+     ],
+     "steps": [
+      "Soak the jar in warm soapy water and peel off the label.",
+      "Wash and dry it fully.",
+      "Use it to store snacks, pens or clips."
+     ],
+     "time_minutes": 10,
+     "safety_note": "Do not use a jar that has cracks or chipped edges."
+    },
+    {
+     "level": "medium",
+     "title": "Desk lantern with an LED tea light",
+     "materials_needed": [
+      "glass jar",
+      "LED tea light",
+      "ribbon or string"
+     ],
+     "steps": [
+      "Clean and dry the jar.",
+      "Tie ribbon or string around the neck.",
+      "Place an LED tea light inside."
+     ],
+     "time_minutes": 20,
+     "safety_note": "Use LED lights only, never real candles near paper."
+    },
+    {
+     "level": "creative",
+     "title": "Mini terrarium",
+     "materials_needed": [
+      "wide jar",
+      "small stones",
+      "soil",
+      "a small plant"
+     ],
+     "steps": [
+      "Add a layer of small stones at the bottom.",
+      "Add soil on top.",
+      "Plant a small succulent and water lightly."
+     ],
+     "time_minutes": 45,
+     "safety_note": "Wash your hands after handling soil."
+    }
+   ]
+  }
+ },
+ "paper cup": {
+  "keywords": [
+   "paper cup",
+   "disposable cup",
+   "cup",
+   "tea cup"
+  ],
+  "answer": {
+   "item": "paper cup",
+   "material": "paper with a thin plastic lining",
+   "recyclable": false,
+   "correct_bin": "dry",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Seedling pot",
+     "materials_needed": [
+      "clean paper cup",
+      "pencil",
+      "soil",
+      "seeds"
+     ],
+     "steps": [
+      "Rinse and dry the cup.",
+      "Poke two small drainage holes in the bottom with a pencil.",
+      "Fill with soil and plant a few seeds."
+     ],
+     "time_minutes": 10,
+     "safety_note": ""
+    },
+    {
+     "level": "medium",
+     "title": "Desk organiser set",
+     "materials_needed": [
+      "3 or 4 paper cups",
+      "glue",
+      "coloured paper"
+     ],
+     "steps": [
+      "Cover each cup with coloured paper.",
+      "Glue the cups side by side.",
+      "Use them for pens, clips and erasers."
+     ],
+     "time_minutes": 25,
+     "safety_note": ""
+    },
+    {
+     "level": "creative",
+     "title": "Hanging paper-cup planters",
+     "materials_needed": [
+      "4 paper cups",
+      "string",
+      "soil",
+      "small plants"
+     ],
+     "steps": [
+      "Punch two holes near the rim of each cup.",
+      "Tie string through the holes.",
+      "Fill with soil, plant, and hang near a window."
+     ],
+     "time_minutes": 40,
+     "safety_note": "Hang them from a strong hook."
+    }
+   ]
+  }
+ },
+ "notebook": {
+  "keywords": [
+   "notebook",
+   "copy",
+   "copies",
+   "exercise book",
+   "old notebook"
+  ],
+  "answer": {
+   "item": "used notebook",
+   "material": "paper",
+   "recyclable": true,
+   "correct_bin": "recyclable",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Rough-work pad",
+     "materials_needed": [
+      "old notebook",
+      "stapler or clip"
+     ],
+     "steps": [
+      "Tear out the unused pages.",
+      "Stack them and clip or staple at the top.",
+      "Use the pad for rough work and notes."
+     ],
+     "time_minutes": 5,
+     "safety_note": ""
+    },
+    {
+     "level": "medium",
+     "title": "Sticky-note style memo pad",
+     "materials_needed": [
+      "unused pages",
+      "scissors",
+      "glue"
+     ],
+     "steps": [
+      "Cut the pages into small squares.",
+      "Stack them and glue along one edge.",
+      "Keep the pad on your desk."
+     ],
+     "time_minutes": 20,
+     "safety_note": "Use scissors, and cut away from your hands."
+    },
+    {
+     "level": "creative",
+     "title": "Handmade journal",
+     "materials_needed": [
+      "old cover",
+      "unused pages",
+      "string",
+      "thick needle"
+     ],
+     "steps": [
+      "Collect the clean pages into a bundle.",
+      "Fold them in half and punch holes along the fold.",
+      "Tie the bundle together with string."
+     ],
+     "time_minutes": 40,
+     "safety_note": "Be careful with the needle."
+    }
+   ]
+  }
+ },
+ "newspaper": {
+  "keywords": [
+   "newspaper",
+   "magazine",
+   "paper",
+   "waste paper"
+  ],
+  "answer": {
+   "item": "newspaper",
+   "material": "paper",
+   "recyclable": true,
+   "correct_bin": "recyclable",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Gift wrap and shelf liner",
+     "materials_needed": [
+      "newspaper sheets",
+      "tape"
+     ],
+     "steps": [
+      "Pick clean, dry sheets.",
+      "Wrap gifts or line shelves and drawers with them.",
+      "Secure with tape."
+     ],
+     "time_minutes": 5,
+     "safety_note": ""
+    },
+    {
+     "level": "medium",
+     "title": "Paper bags",
+     "materials_needed": [
+      "newspaper",
+      "glue or tape",
+      "scissors"
+     ],
+     "steps": [
+      "Fold a few sheets into a tube and glue the side.",
+      "Fold the bottom flat and glue it.",
+      "Add a paper strip as a handle."
+     ],
+     "time_minutes": 25,
+     "safety_note": ""
+    },
+    {
+     "level": "creative",
+     "title": "Paper-mache bowl",
+     "materials_needed": [
+      "newspaper strips",
+      "flour",
+      "water",
+      "an old bowl",
+      "plastic wrap"
+     ],
+     "steps": [
+      "Mix flour and water into a thin paste.",
+      "Cover an upside-down bowl with plastic wrap and layer paste-dipped strips on it.",
+      "Let it dry fully, then peel it off and paint it."
+     ],
+     "time_minutes": 60,
+     "safety_note": "Let it dry completely before using it."
+    }
+   ]
+  }
+ },
+ "cardboard box": {
+  "keywords": [
+   "cardboard",
+   "carton",
+   "box"
+  ],
+  "answer": {
+   "item": "cardboard box",
+   "material": "cardboard",
+   "recyclable": true,
+   "correct_bin": "recyclable",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Drawer organiser",
+     "materials_needed": [
+      "small cardboard box",
+      "scissors"
+     ],
+     "steps": [
+      "Cut the box down so it fits your drawer.",
+      "Cut a few strips for dividers.",
+      "Place the dividers inside and sort your small items."
+     ],
+     "time_minutes": 10,
+     "safety_note": "Cut away from your hands."
+    },
+    {
+     "level": "medium",
+     "title": "Desk file holder",
+     "materials_needed": [
+      "cereal-style box",
+      "scissors",
+      "paper or paint"
+     ],
+     "steps": [
+      "Cut the box diagonally from the top corners to the middle.",
+      "Trim the edges neatly.",
+      "Cover it with paper or paint it."
+     ],
+     "time_minutes": 30,
+     "safety_note": "Cut away from your hands."
+    },
+    {
+     "level": "creative",
+     "title": "Mini shelf for your room",
+     "materials_needed": [
+      "2 or 3 boxes",
+      "glue",
+      "paper or paint"
+     ],
+     "steps": [
+      "Stack and glue the boxes with the open sides facing out.",
+      "Let the glue dry fully.",
+      "Cover or paint the boxes."
+     ],
+     "time_minutes": 60,
+     "safety_note": "Only keep light items on it."
+    }
+   ]
+  }
+ },
+ "plastic bag": {
+  "keywords": [
+   "plastic bag",
+   "carry bag",
+   "polythene",
+   "bag"
+  ],
+  "answer": {
+   "item": "plastic bag",
+   "material": "polythene",
+   "recyclable": false,
+   "correct_bin": "dry",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Dustbin liner or shoe cover",
+     "materials_needed": [
+      "clean plastic bag"
+     ],
+     "steps": [
+      "Shake out any dirt.",
+      "Use it as a small dustbin liner or to wrap muddy shoes.",
+      "Keep a few folded in your bag."
+     ],
+     "time_minutes": 2,
+     "safety_note": ""
+    },
+    {
+     "level": "medium",
+     "title": "Carry-bag holder",
+     "materials_needed": [
+      "plastic bags",
+      "an empty tissue box"
+     ],
+     "steps": [
+      "Fold each bag into a small triangle.",
+      "Push the triangles into the tissue box.",
+      "Pull them out one at a time when needed."
+     ],
+     "time_minutes": 15,
+     "safety_note": ""
+    },
+    {
+     "level": "creative",
+     "title": "Woven plastic mat",
+     "materials_needed": [
+      "10 to 15 plastic bags",
+      "scissors"
+     ],
+     "steps": [
+      "Cut the bags into long loops.",
+      "Link the loops together into a long strip.",
+      "Braid or coil the strip into a small mat."
+     ],
+     "time_minutes": 90,
+     "safety_note": "Keep it away from heat and flames."
+    }
+   ]
+  }
+ },
+ "plastic bottle": {
+  "keywords": [
+   "plastic bottle",
+   "pet bottle",
+   "water bottle",
+   "bottle"
+  ],
+  "answer": {
+   "item": "plastic bottle",
+   "material": "PET plastic",
+   "recyclable": true,
+   "correct_bin": "recyclable",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Pen and pencil stand",
+     "materials_needed": [
+      "empty bottle",
+      "scissors",
+      "tape"
+     ],
+     "steps": [
+      "Rinse the bottle and let it dry.",
+      "Cut off the top third with scissors.",
+      "Cover the cut edge with tape."
+     ],
+     "time_minutes": 10,
+     "safety_note": "Cut slowly and cover the sharp edge with tape."
+    },
+    {
+     "level": "medium",
+     "title": "Self-watering herb planter",
+     "materials_needed": [
+      "bottle",
+      "scissors",
+      "cotton string",
+      "soil",
+      "seeds"
+     ],
+     "steps": [
+      "Cut the bottle in half.",
+      "Make a small hole in the cap and thread the string through it.",
+      "Turn the top half upside down into the bottom half.",
+      "Fill the bottom with water and the top with soil, then plant."
+     ],
+     "time_minutes": 30,
+     "safety_note": "Be careful while cutting plastic."
+    },
+    {
+     "level": "creative",
+     "title": "Hanging vertical garden",
+     "materials_needed": [
+      "3 or 4 bottles",
+      "rope",
+      "soil",
+      "small plants"
+     ],
+     "steps": [
+      "Cut a window on the side of each bottle.",
+      "Poke small drainage holes in the bottom.",
+      "Tie the bottles in a line with rope and hang them on a balcony."
+     ],
+     "time_minutes": 90,
+     "safety_note": "Hang it from a strong hook away from walkways."
+    }
+   ]
+  }
+ },
+ "old t-shirt": {
+  "keywords": [
+   "t-shirt",
+   "tshirt",
+   "t shirt",
+   "shirt",
+   "clothes",
+   "cloth",
+   "fabric",
+   "old clothes"
+  ],
+  "answer": {
+   "item": "old t-shirt",
+   "material": "cotton fabric",
+   "recyclable": false,
+   "correct_bin": "dry",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Cleaning cloths",
+     "materials_needed": [
+      "old t-shirt",
+      "scissors"
+     ],
+     "steps": [
+      "Wash the t-shirt.",
+      "Cut it into squares.",
+      "Use the squares to dust or wipe surfaces."
+     ],
+     "time_minutes": 10,
+     "safety_note": "Cut away from your hands."
+    },
+    {
+     "level": "medium",
+     "title": "No-sew tote bag",
+     "materials_needed": [
+      "old t-shirt",
+      "scissors"
+     ],
+     "steps": [
+      "Cut off the sleeves and widen the neck opening.",
+      "Cut 3 cm fringes along the bottom hem.",
+      "Tie each front fringe to the matching back fringe."
+     ],
+     "time_minutes": 30,
+     "safety_note": "Cut away from your hands."
+    },
+    {
+     "level": "creative",
+     "title": "Braided coasters",
+     "materials_needed": [
+      "old t-shirt",
+      "scissors",
+      "needle and thread"
+     ],
+     "steps": [
+      "Cut the shirt into long strips and stretch them.",
+      "Braid three strips together.",
+      "Coil the braid into a circle and stitch it in place."
+     ],
+     "time_minutes": 60,
+     "safety_note": "Be careful with the needle."
+    }
+   ]
+  }
+ },
+ "tin can": {
+  "keywords": [
+   "tin can",
+   "tin",
+   "can",
+   "aluminium can",
+   "soda can",
+   "steel can"
+  ],
+  "answer": {
+   "item": "tin can",
+   "material": "steel or aluminium",
+   "recyclable": true,
+   "correct_bin": "recyclable",
+   "reuse_safe": true,
+   "disposal_note": "",
+   "ideas": [
+    {
+     "level": "easy",
+     "title": "Pen holder",
+     "materials_needed": [
+      "clean empty can",
+      "tape or paper"
+     ],
+     "steps": [
+      "Wash the can and dry it.",
+      "Cover the rim with tape so it is not sharp.",
+      "Wrap the outside with paper and decorate."
+     ],
+     "time_minutes": 15,
+     "safety_note": "Check that there are no sharp edges before use."
+    },
+    {
+     "level": "medium",
+     "title": "Small plant pot",
+     "materials_needed": [
+      "empty can",
+      "nail and hammer",
+      "soil",
+      "a small plant"
+     ],
+     "steps": [
+      "Wash the can and cover the rim with tape.",
+      "Make drainage holes in the bottom with a nail.",
+      "Fill with soil and plant."
+     ],
+     "time_minutes": 30,
+     "safety_note": "Ask for help with the hammer and nail."
+    },
+    {
+     "level": "creative",
+     "title": "Pattern lantern",
+     "materials_needed": [
+      "empty can",
+      "water",
+      "nail and hammer",
+      "LED tea light"
+     ],
+     "steps": [
+      "Fill the can with water and freeze it.",
+      "Tap a pattern of holes with a nail and hammer.",
+      "Let the ice melt, dry the can, and put an LED tea light inside."
+     ],
+     "time_minutes": 60,
+     "safety_note": "Use LED lights only, and ask for help with the hammer and nail."
+    }
+   ]
+  }
+ }
+}
