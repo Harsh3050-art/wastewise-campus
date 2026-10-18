@@ -3,6 +3,7 @@ import bcrypt
 import streamlit as st
 from services.db import get_conn
 from services.alerts import render_alerts
+from services.notifications import unread_count, toast_new
 
 MIN_PASSWORD = 8
 
@@ -111,18 +112,22 @@ def require_admin():
         st.stop()
 
 
-def sidebar_user():
+def sidebar_user(poll=False):
     u = current_user()
-
     if u:
+        toast_new(u["id"])
         with st.sidebar:
             st.write(f"Logged in as **{u['name']}** ({u['role']})")
-
+            n = unread_count(u["id"])
+            st.page_link("pages/5_Notifications.py",
+                         label=f"Notifications ({n})" if n else "Notifications", icon="🔔")
             if st.button("Log out", key="logout_btn"):
                 logout()
                 st.rerun()
-
             if u["role"] == "admin":
                 st.divider()
                 st.subheader("Fill alerts")
                 render_alerts(5, compact=True)
+        if poll:
+            from streamlit_autorefresh import st_autorefresh
+            st_autorefresh(interval=15_000, key="notif_poll")

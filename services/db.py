@@ -105,15 +105,25 @@ CREATE TABLE IF NOT EXISTS points_log (
   points INTEGER NOT NULL, reason TEXT, ref_id TEXT,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS report_votes (
+  report_id INTEGER NOT NULL REFERENCES reports(id),
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (report_id, user_id)
+);
+
 """
+
 
 
 @contextmanager
 def get_conn():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=10)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA journal_mode = WAL")
     try:
         yield conn
         conn.commit()
@@ -122,6 +132,7 @@ def get_conn():
         raise
     finally:
         conn.close()
+
 
 
 def init_db():

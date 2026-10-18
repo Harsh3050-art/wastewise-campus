@@ -5,3 +5,6 @@ __pycache__/
 *.db
 .streamlit/secrets.toml
 preview.html
+*.db-wal
+*.db-shm
+data/uploads/
