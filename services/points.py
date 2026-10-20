@@ -18,10 +18,8 @@ def award_in(conn, user_id, points, reason, ref_id=None, max_per_day=None):
         "INSERT INTO points_log (user_id, points, reason, ref_id) VALUES (?,?,?,?)",
         (user_id, points, reason, ref_id),
     )
-    conn.execute(
-        "UPDATE users SET total_points = total_points + ? WHERE id = ?",
-        (points, user_id),
-    )
+    conn.execute("UPDATE users SET total_points = MAX(0, total_points + ?) WHERE id = ?",
+                 (points, user_id))
     return points
 
 

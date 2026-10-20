@@ -1,15 +1,16 @@
 import plotly.express as px
 import streamlit as st
 import pandas as pd
+from services import submissions as sb
 from ml.forecast import load_meta, hourly_profile, train
-
+from ml.simulator import advance, backfill
 from services import reports as rp
 from services.alerts import render_alerts
 from services.auth import require_admin, sidebar_user, current_user
 from services.cleaning import mark_cleaned, avg_response_hours, clean_history
 from services.stats import admin_kpis
 from services.timeutil import ago
-
+from services.summary import daily_brief
 st.set_page_config(page_title="Admin Dashboard", layout="wide")
 require_admin()
 sidebar_user()
@@ -26,7 +27,11 @@ st.title("Admin Dashboard")
 flash = st.session_state.pop("admin_flash", None)
 if flash:
     st.success(flash)
-
+if k["pending_creations"] or k["flagged_creations"]:
+    st.warning(
+        f"{k['pending_creations']} creation(s) are waiting for your review and "
+        f"{k['flagged_creations']} flagged by students. Open the last tab."
+    )
 r1 = st.columns(3)
 with r1[0].container(border=True):
     st.metric("Total bins", k["total"])
@@ -43,11 +48,66 @@ with r2[1].container(border=True):
 with r2[2].container(border=True):
     st.metric("Cleaned today", k["cleaned_today"])
 
+r3 = st.columns(3)
+
+with r3[0].container(border=True):
+    st.metric("Creations to review", k["pending_creations"])
+
+with r3[1].container(border=True):
+    st.metric("Flagged creations", k["flagged_creations"])
+
+def demo_controls_enabled():
+    try:
+        return str(st.secrets.get("DEMO_MODE", "true")).lower() != "false"
+    except Exception:
+        return True
+
+
+if demo_controls_enabled():
+    with st.expander("Simulation controls (demo only)"):
+        st.caption(
+            "There are no real sensors, so these buttons move the simulated clock forward "
+            "and refill the bins. Real sensors would write the same readings."
+        )
+        b1, b2, b3, b4 = st.columns(4)
+        moved = None
+
+        if b1.button("Advance 1 hour"):
+            advance(1)
+            moved = "Moved the simulation forward by 1 hour."
+
+        if b2.button("Advance 6 hours"):
+            advance(6)
+            moved = "Moved the simulation forward by 6 hours."
+
+        if b3.button("Advance 24 hours"):
+            advance(24)
+            moved = "Moved the simulation forward by 24 hours."
+
+        if b4.button("Reset to realistic levels"):
+            with st.spinner("Rebuilding 28 days of history..."):
+                backfill(28)
+            moved = "Bin levels were rebuilt from 28 days of simulated history."
+
+        if moved:
+            st.session_state["admin_flash"] = moved
+            st.rerun()
+with st.expander("Today's brief", expanded=True):
+    for line in daily_brief():
+        st.write("- " + line)
 st.subheader("Top 5 bins about to fill")
 render_alerts(5)
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(
-    ["Priority list and cleaning", "Open reports", "Cleaning history", "Overview", "Forecast model"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+    [
+        "Priority list and cleaning",
+        "Open reports",
+        "Cleaning history",
+        "Overview",
+        "Forecast model",
+        f"Creations to review ({k['pending_creations'] + k['flagged_creations']})",
+    ]
+)
 
 with tab1:
     ranked = df.sort_values("priority", ascending=False).copy()
@@ -71,21 +131,28 @@ with tab1:
         st.rerun()
 
 with tab2:
-    items = rp.open_reports_all()
+    view = st.radio("Show", ["Open", "Resolved", "All"], horizontal=True, key="report_view")
+    if view == "Open":
+        items = rp.open_reports_all()
+    else:
+        items = rp.all_reports("resolved" if view == "Resolved" else None)
     if not items:
-        st.info("No open reports right now.")
+        st.info(f"No {view.lower()} reports.")
     for x in items:
         with st.container(border=True):
             c1, c2 = st.columns([4, 1])
             with c1:
-                st.write(f"**{x['bin_name']}** ({x['bin_id']}): {x['tag']}")
+                st.write(f"**{x['bin_name']}** ({x['bin_id']}): {x['tag']} | {x['status']}")
                 if x["comment"]:
                     st.write(x["comment"])
-                st.caption(f"By {x['user_name']} | {ago(x['created_at'])} | {x['upvotes']} me too")
+                note = f"By {x['user_name']} | {ago(x['created_at'])} | {x['upvotes']} me too"
+                if x["status"] == "resolved" and x["resolved_at"]:
+                    note += f" | resolved {ago(x['resolved_at'])}"
+                st.caption(note)
             with c2:
                 if x["photo_path"]:
                     st.image(rp.photo_abs(x["photo_path"]), width=120)
-            if st.button("Dismiss (not valid)", key=f"dismiss_{x['id']}"):
+            if x["status"] == "open" and st.button("Dismiss (not valid)", key=f"dismiss_{x['id']}"):
                 rp.dismiss_report(x["id"], admin["id"])
                 st.session_state["admin_flash"] = "Report dismissed."
                 st.rerun()
@@ -158,3 +225,74 @@ with tab5:
                        title="Predicted fill gained per hour (%)")
         fig2.update_layout(height=320, margin=dict(l=10, r=10, t=50, b=10))
         st.plotly_chart(fig2)
+with tab6:
+    pending = sb.pending_list()
+    st.subheader(f"Waiting for review ({len(pending)})")
+    if not pending:
+        st.info("No creations are waiting for review.")
+    for s in pending:
+        sid = s["id"]
+        with st.container(border=True):
+            st.markdown(f"**{s['idea_title']}**")
+            st.caption(f"By {s['user_name']} ({s['hostel_or_dept'] or 'no hostel or department'}) "
+                       f"| {ago(s['created_at'])}")
+            st.write(f"**Waste used:** {s['materials']}")
+            if s["description"]:
+                st.write(s["description"])
+            p1, p2 = st.columns(2)
+            p1.image(rp.photo_abs(s["process_photo_path"]), caption="Photo 1: waste item or work in progress")
+            p2.image(rp.photo_abs(s["photo_path"]), caption="Photo 2: finished product")
+            st.info(f"Code check: photo 2 should show the code {s['daily_code']} written on paper "
+                    f"(the code of the day it was submitted).")
+            st.caption(f"This student: {s['user_approved']} approved, {s['user_rejected']} rejected, "
+                       f"{s['user_week']} shared in the last 7 days.")
+            similar = sb.similar_to(sid)
+            if similar:
+                st.warning("Similar photos found: " + ", ".join(
+                    f"'{x['title']}' (difference {x['distance']} of 64)" for x in similar))
+            reason = st.text_input("Reason (needed to reject)", key=f"rej_{sid}", max_chars=200)
+            b1, b2, b3, b4 = st.columns(4)
+            action = None
+            if b1.button("Approve (+30)", key=f"ap_{sid}", type="primary"):
+                action = sb.approve(sid, admin["id"])
+            if b2.button("Approve as creative (+40)", key=f"apc_{sid}"):
+                action = sb.approve(sid, admin["id"], creative=True)
+            if b3.button("Reject", key=f"rj_{sid}"):
+                action = sb.reject(sid, admin["id"], reason)
+            if b4.button("Reject as fake (-20)", key=f"rf_{sid}"):
+                action = sb.reject(sid, admin["id"], reason, fake=True)
+            if action:
+                ok, msg = action
+                if ok:
+                    st.session_state["admin_flash"] = msg
+                    st.rerun()
+                else:
+                    st.error(msg)
+
+    flagged = sb.flagged_list()
+    st.subheader(f"Flagged by students ({len(flagged)})")
+    if not flagged:
+        st.caption("Nothing flagged.")
+    for s in flagged:
+        sid = s["id"]
+        with st.container(border=True):
+            st.markdown(f"**{s['idea_title']}** by {s['user_name']}")
+            st.caption(f"Flagged by {s['flag_count']} students: {s['flag_reasons'] or 'no reasons given'}")
+            f1, f2 = st.columns(2)
+            f1.image(rp.photo_abs(s["process_photo_path"]), caption="Photo 1")
+            f2.image(rp.photo_abs(s["photo_path"]), caption="Photo 2")
+            note = st.text_input("Reason (needed to withdraw approval)", key=f"fl_note_{sid}",
+                                 max_chars=200)
+            k1, k2 = st.columns(2)
+            action = None
+            if k1.button("Keep approved", key=f"keep_{sid}"):
+                action = sb.resolve_flag(sid, admin["id"], False)
+            if k2.button("Withdraw approval (points taken back)", key=f"wd_{sid}"):
+                action = sb.resolve_flag(sid, admin["id"], True, note)
+            if action:
+                ok, msg = action
+                if ok:
+                    st.session_state["admin_flash"] = msg
+                    st.rerun()
+                else:
+                    st.error(msg)

@@ -98,10 +98,20 @@ def current_user():
 def logout():
     st.session_state.pop("user", None)
 
-
+def hide_sidebar():
+    """Hide the whole sidebar (used on the login screen)."""
+    st.markdown(
+        """<style>
+        [data-testid="stSidebar"],
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="collapsedControl"] { display: none; }
+        </style>""",
+        unsafe_allow_html=True)
 def require_login():
     if not current_user():
-        st.warning("Please log in from the Home page first.")
+        hide_sidebar()
+        st.warning("Please log in first.")
+        st.page_link("Home.py", label="Go to the login page", icon="🔑")
         st.stop()
 
 
@@ -111,11 +121,22 @@ def require_admin():
         st.error("This page is only for the waste management team.")
         st.stop()
 
+ADMIN_HIDDEN_PAGES = ["Reuse_Coach", "Profile", "Share_Creation"]
+STUDENT_HIDDEN_PAGES = ["Admin_Dashboard"]
+
+
+def hide_nav_links(page_names):
+    """Hide entries from the sidebar page list (the pages themselves are also guarded)."""
+    rules = ", ".join(
+        f'[data-testid="stSidebarNav"] a[href$="/{n}"], [data-testid="stSidebarNavLink"][href$="/{n}"]'
+        for n in page_names)
+    st.markdown(f"<style>{rules} {{ display: none; }}</style>", unsafe_allow_html=True)
 
 def sidebar_user(poll=False):
     u = current_user()
     if u:
         toast_new(u["id"])
+        hide_nav_links(["Notifications"] + (ADMIN_HIDDEN_PAGES if u["role"] == "admin" else STUDENT_HIDDEN_PAGES))
         with st.sidebar:
             st.write(f"Logged in as **{u['name']}** ({u['role']})")
             n = unread_count(u["id"])
@@ -131,3 +152,27 @@ def sidebar_user(poll=False):
         if poll:
             from streamlit_autorefresh import st_autorefresh
             st_autorefresh(interval=15_000, key="notif_poll")
+
+def change_password(user_id, old, new, confirm):
+    if len(new) < MIN_PASSWORD:
+        return False, f"Password must be at least {MIN_PASSWORD} characters."
+    if len(new.encode("utf-8")) > 72:
+        return False, "Password is too long (max 72 bytes)."
+    if new != confirm:
+        return False, "The new passwords do not match."
+
+    with get_conn() as conn:
+        row = conn.execute(
+            "SELECT password_hash FROM users WHERE id = ?",
+            (user_id,)
+        ).fetchone()
+
+        if not row or not verify_password(old, row["password_hash"]):
+            return False, "Your current password is wrong."
+
+        conn.execute(
+            "UPDATE users SET password_hash = ? WHERE id = ?",
+            (hash_password(new), user_id)
+        )
+
+    return True, "Password changed."

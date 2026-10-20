@@ -1,14 +1,12 @@
-
 import hmac
 from datetime import date
 
 import streamlit as st
-from services.facts import fact_of_the_day
-from services.db import init_db
-from services.auth import signup, login, current_user, sidebar_user
+from services.auth import signup, login, current_user, sidebar_user, hide_sidebar
 from services.bins import get_all_bins
+from services.bootstrap import ensure_ready
+from services.facts import fact_of_the_day
 from services.stats import user_stats, badge_info
-
 
 WASTE_LABELS = {
     "wet": "Food / wet waste",
@@ -34,7 +32,16 @@ st.set_page_config(
     layout="wide",
 )
 
-init_db()
+
+# First start: creates the database, loads the bins, builds the simulated
+# history and trains the forecast model. It runs once per server start.
+@st.cache_resource
+def _boot():
+    ensure_ready()
+    return True
+
+
+_boot()
 
 st.markdown("""
 <style>
@@ -196,15 +203,23 @@ if user:
             st.write(f"Reuse ideas tried: **{s['ideas']}**")
             st.write(f"Approved creations: **{s['makes']}**")
 
-        st.page_link("pages/2_Reuse_Coach.py", label="Ask the Reuse Coach", icon="♻️")
+    # QUICK LINKS
+    st.page_link("pages/2_Reuse_Coach.py", label="Ask the Reuse Coach", icon="♻️")
+    st.page_link("pages/7_Share_Creation.py", label="Share something you made", icon="📸")
+    st.page_link("pages/3_Leaderboard.py", label="Leaderboard", icon="🏆")
+    st.page_link("pages/4_Profile.py", label="My profile", icon="👤")
     st.page_link("pages/1_Campus_Map.py", label="Open the campus map", icon="🗺️")
+
+    st.caption("Demo note: bin fill levels are simulated. "
+               "Real sensors would write the same readings.")
 
     st.stop()
 
+# --------------------------------------------------
+# LOGIN AND SIGNUP PAGE (no sidebar when logged out)
+# --------------------------------------------------
+hide_sidebar()
 
-# --------------------------------------------------
-# LOGIN AND SIGNUP PAGE
-# --------------------------------------------------
 left, right = st.columns([1.1, 1], gap="large")
 
 with left:
@@ -223,10 +238,11 @@ with left:
 with right:
     fact = fact_of_the_day()
     if fact:
-            with st.container(border=True):
-                st.subheader("Did you know?")
-                st.write(fact["text"])
-                st.caption("Source: " + fact["source"])
+        with st.container(border=True):
+            st.subheader("Did you know?")
+            st.write(fact["text"])
+            st.caption("Source: " + fact["source"])
+
     tab_login, tab_signup = st.tabs(["Log in", "Sign up"])
 
     with tab_login:

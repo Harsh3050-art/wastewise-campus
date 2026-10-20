@@ -84,9 +84,11 @@ def get_all_bins() -> pd.DataFrame:
     return add_forecast(df)
 
 
-def top_alerts(n=5, within_hours=24):
+def top_alerts(n=5, within_hours=24, min_fill=30):
+    """Bins that are filling soon. Nearly empty bins are not alerts."""
     df = get_all_bins()
-    df = df[df["hours_to_full"].notna() & (df["hours_to_full"] <= within_hours)]
+    df = df[df["hours_to_full"].notna() & (df["hours_to_full"] <= within_hours)
+            & (df["fill_pct"] >= min_fill)]
     return df.sort_values("hours_to_full").head(n)
 
 

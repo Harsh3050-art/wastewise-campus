@@ -135,6 +135,16 @@ def get_conn():
 
 
 
+def migrate(conn):
+    """Add columns that were introduced after the first version of the schema."""
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(submissions)")}
+    if "daily_code" not in cols:
+        conn.execute("ALTER TABLE submissions ADD COLUMN daily_code TEXT")
+    if "flag_review" not in cols:
+        conn.execute("ALTER TABLE submissions ADD COLUMN flag_review INTEGER NOT NULL DEFAULT 0")
+
+
 def init_db():
     with get_conn() as conn:
         conn.executescript(SCHEMA)
+        migrate(conn)

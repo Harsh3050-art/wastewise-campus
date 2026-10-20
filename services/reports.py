@@ -118,3 +118,17 @@ def dismiss_report(report_id, admin_id):
                f"The waste team reviewed your report on {r['name']} and closed it without cleaning.",
                r["bin_id"])
     return True
+def all_reports(status=None, limit=200):
+    """Reports from every bin, newest first. status: None (all), 'open' or 'resolved'."""
+    sql = ("SELECT r.*, u.name AS user_name, b.name AS bin_name "
+           "FROM reports r JOIN users u ON u.id = r.user_id "
+           "JOIN bins b ON b.bin_id = r.bin_id")
+    params = []
+    if status in ("open", "resolved"):
+        sql += " WHERE r.status = ?"
+        params.append(status)
+    sql += " ORDER BY r.id DESC LIMIT ?"
+    params.append(limit)
+    with get_conn() as conn:
+        rows = conn.execute(sql, params).fetchall()
+    return [dict(r) for r in rows]

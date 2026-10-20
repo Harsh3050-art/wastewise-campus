@@ -10,7 +10,10 @@ st.set_page_config(page_title="Reuse Coach", layout="wide")
 require_login()
 sidebar_user()
 user = current_user()
-
+if user["role"] == "admin":
+    st.info("This page is for students.")
+    st.stop()
+    
 AI_ON = ai_client.ai_configured()
 EXAMPLES = ["plastic bottle", "newspaper", "glass jar", "tin can", "old t-shirt", "paper cup"]
 LEVEL_LABEL = {"easy": "Easy", "medium": "Medium", "creative": "Creative"}
@@ -93,6 +96,10 @@ if state:
                     ok, m = coach.adopt_idea(user["id"], res["item"], idea["title"])
                     st.session_state["coach_flash"] = m
                     st.rerun()
+                if res["ideas"]:
+                   st.page_link("pages/7_Share_Creation.py", label="Made it? Share it to earn points", icon="📸")
+
+
 
         st.subheader(f"Or bin it right: emptiest {TYPE_LABEL[res['correct_bin']].lower()} bins now")
         bins = get_all_bins()

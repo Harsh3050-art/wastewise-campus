@@ -103,20 +103,46 @@ def live(interval, step_minutes, auto_clean):
     except KeyboardInterrupt:
         print("Simulator stopped.")
 
-
+def advance(hours, step_minutes=10, auto_clean=False):
+    """Fast-forward the simulation by `hours` without waiting."""
+    step_h = step_minutes / 60
+    ticks = max(1, int(hours * 60 // step_minutes))
+    with get_conn() as conn:
+        last = conn.execute("SELECT MAX(recorded_at) FROM bin_readings").fetchone()[0]
+        t = datetime.strptime(last, TS) if last else datetime.now()
+        bins = load_bins(conn)
+        fills = {b["bin_id"]: b["fill_pct"] for b in bins}
+        rows = []
+        for _ in range(ticks):
+            t += timedelta(minutes=step_minutes)
+            for b in bins:
+                bid = b["bin_id"]
+                fill = step_fill(fills[bid], b["fill_rate_per_hr"], b["type"], t, step_h)
+                if auto_clean and fill >= 95 and random.random() < 0.3:
+                    fill = random.uniform(0, 5)
+                fills[bid] = fill
+                rows.append((bid, round(fill, 1), t.strftime(TS)))
+        for bid, fill in fills.items():
+            conn.execute("UPDATE bins SET fill_pct = ? WHERE bin_id = ?", (round(fill, 1), bid))
+        conn.executemany("INSERT INTO bin_readings (bin_id, fill_pct, recorded_at) VALUES (?,?,?)", rows)
+    print(f"Advanced {ticks * step_minutes / 60:.1f} hours ({ticks} steps). "
+          f"Simulated time is now {t:%a %d %b %H:%M}.")
 def main():
     p = argparse.ArgumentParser(description="WasteWise bin fill simulator")
     p.add_argument("--backfill-days", type=int, help="generate N days of history")
+    p.add_argument("--advance-hours", type=float, help="fast-forward the simulation by N hours instantly")
     p.add_argument("--live", action="store_true", help="keep updating until Ctrl+C")
     p.add_argument("--interval", type=float, default=10, help="real seconds between updates")
     p.add_argument("--step-minutes", type=int, default=10, help="simulated minutes per update")
-    p.add_argument("--auto-clean", action="store_true", help="simulate a cleaning crew in live mode")
+    p.add_argument("--auto-clean", action="store_true", help="simulate a cleaning crew")
     a = p.parse_args()
     if a.backfill_days:
         backfill(a.backfill_days)
+    if a.advance_hours:
+        advance(a.advance_hours, a.step_minutes, a.auto_clean)
     if a.live:
         live(a.interval, a.step_minutes, a.auto_clean)
-    if not a.backfill_days and not a.live:
+    if not (a.backfill_days or a.advance_hours or a.live):
         p.print_help()
 
 

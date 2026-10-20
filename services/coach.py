@@ -7,7 +7,6 @@ from PIL import Image
 
 from services import ai_client
 from services.db import get_conn
-from services.points import award_in
 
 ROOT = Path(__file__).resolve().parent.parent
 FALLBACK_PATH = ROOT / "data" / "fallback_ideas.json"
@@ -16,8 +15,6 @@ BIN_TYPES = ["wet", "dry", "recyclable", "ewaste", "hazardous"]
 LEVELS = ["easy", "medium", "creative"]
 MAX_ITEM_CHARS = 60
 AI_CALLS_PER_HOUR = 15
-IDEA_POINTS = 2
-IDEA_DAILY_CAP = 3
 MAX_PHOTO_BYTES = 5_000_000
 
 SYSTEM_PROMPT = """You are EcoReuse Coach for students living on an Indian university campus.
@@ -207,15 +204,12 @@ def get_ideas(item, user_id, image_bytes=None, image_mime="image/jpeg"):
 
 
 def adopt_idea(user_id, item, idea_title):
+    """Remember that a student tried an idea. It gives no points: points need verified proof."""
     item, title = normalize(item) or "item", (idea_title or "")[:80]
     with get_conn() as conn:
         if conn.execute("SELECT 1 FROM adopted_ideas WHERE user_id = ? AND item = ? "
                         "AND idea_title = ?", (user_id, item, title)).fetchone():
             return False, "You already marked this idea as tried."
-        cur = conn.execute("INSERT INTO adopted_ideas (user_id, item, idea_title) VALUES (?,?,?)",
-                           (user_id, item, title))
-        pts = award_in(conn, user_id, IDEA_POINTS, "idea_adopted", f"idea:{cur.lastrowid}",
-                       max_per_day=IDEA_DAILY_CAP)
-    if pts:
-        return True, f"Great! +{pts} points. Verified creations earn much bigger points."
-    return True, "Saved. You reached today's limit for idea points, so no points this time."
+        conn.execute("INSERT INTO adopted_ideas (user_id, item, idea_title) VALUES (?,?,?)",
+                     (user_id, item, title))
+    return True, "Saved to your profile. Share a photo of what you make to earn points."

@@ -1,10 +1,12 @@
 from services.db import get_conn
 from services.bins import get_all_bins
+from services.submissions import counts as creation_counts
 
 BADGES = [(0, "Eco Starter"), (50, "Green Scout"), (150, "Upcycle Pro"), (400, "Campus Champion")]
 
 
 def badge_info(points):
+    points = max(0, points)
     idx = max(i for i, (need, _) in enumerate(BADGES) if points >= need)
     name = BADGES[idx][1]
     if idx + 1 < len(BADGES):
@@ -33,6 +35,7 @@ def admin_kpis():
         open_reports = conn.execute("SELECT COUNT(*) FROM reports WHERE status = 'open'").fetchone()[0]
         cleaned_today = conn.execute(
             "SELECT COUNT(*) FROM clean_log WHERE date(cleaned_at) = date('now')").fetchone()[0]
+    pending, flagged = creation_counts()
     k = {
         "total": len(df),
         "above80": int((df["fill_pct"] >= 80).sum()),
@@ -40,5 +43,7 @@ def admin_kpis():
         "avg_fill": float(df["fill_pct"].mean()) if len(df) else 0.0,
         "open_reports": open_reports,
         "cleaned_today": cleaned_today,
+        "pending_creations": pending,
+        "flagged_creations": flagged
     }
     return df, k
